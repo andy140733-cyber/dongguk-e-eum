@@ -254,11 +254,12 @@ export default function AdminPage() {
       {/* 탭 2: 사용자 역할 관리 */}
       {activeTab === "users" && (
         <Panel padding="none" className="overflow-x-auto">
-          <table className="w-full min-w-[34rem] text-left">
+          {/* 좁은 화면에서는 '현재 역할' 열을 이름 옆 배지로 합쳐 가로 스크롤 없이 보이게 한다 */}
+          <table className="w-full text-left sm:min-w-[34rem]">
             <thead>
               <tr className="border-b border-line text-xs font-semibold text-ink-3">
                 <th scope="col" className="px-4 py-3 sm:px-5">사용자</th>
-                <th scope="col" className="px-3 py-3">현재 역할</th>
+                <th scope="col" className="hidden px-3 py-3 sm:table-cell">현재 역할</th>
                 <th scope="col" className="px-4 py-3 sm:px-5">역할 변경</th>
               </tr>
             </thead>
@@ -269,17 +270,20 @@ export default function AdminPage() {
                     <div className="flex items-center gap-3">
                       <Avatar name={u.name} initials={u.avatarInitials} role={u.role} size="sm" />
                       <div className="min-w-0">
-                        <p className="text-sm font-semibold text-ink">{u.name}</p>
-                        <p className="text-xs text-ink-3">
+                        <p className="flex flex-wrap items-center gap-1.5 text-sm font-semibold text-ink">
+                          {u.name}
+                          <RoleBadge role={u.role} className="sm:hidden" />
+                        </p>
+                        <p className="text-xs break-all text-ink-3">
                           {u.email} · {u.studentIdOrYear}
                         </p>
                       </div>
                     </div>
                   </td>
-                  <td className="px-3 py-3">
+                  <td className="hidden px-3 py-3 sm:table-cell">
                     <RoleBadge role={u.role} />
                   </td>
-                  <td className="px-4 py-3 sm:px-5">
+                  <td className="px-4 py-3 align-middle sm:px-5">
                     <Select
                       aria-label={`${u.name} 역할`}
                       value={u.role}
@@ -288,7 +292,7 @@ export default function AdminPage() {
                         updateUserRoleByAdmin(u.id, next);
                         toast({ title: `${u.name}님의 역할을 ${ROLE_LABELS[next]}(으)로 바꿨어요` });
                       }}
-                      className="w-36"
+                      className="w-28 sm:w-36"
                     >
                       {ROLE_OPTIONS.map((roleOption) => (
                         <option key={roleOption} value={roleOption}>
