@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useApp } from "@/context/AppContext";
 import { PostCategory } from "@/types";
@@ -80,6 +80,11 @@ export default function RoomsPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeRoomId, setActiveRoomId] = useState<string | null>(null);
   const [selectedPostCat, setSelectedPostCat] = useState<string>("전체");
+
+  // 목록 ↔ 공유방 상세를 오갈 때 화면 맨 위부터 보이도록 (UI 전용)
+  useEffect(() => {
+    window.scrollTo({ top: 0 });
+  }, [activeRoomId]);
 
   // 새 게시글 모달 상태
   const [isPostModalOpen, setIsPostModalOpen] = useState(false);
